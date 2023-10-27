@@ -25,9 +25,6 @@ const msgRetryCounterCache = new NodeCache()
         async function XAsena() {
 
             try {
-                let {
-                    version, isLatest
-                } = await fetchLatestBaileysVersion()
                 const {
                     state, saveCreds
                 } = await useMultiFileAuthState(`./session`)
@@ -38,8 +35,7 @@ const msgRetryCounterCache = new NodeCache()
                     }),
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
-                    auth: state,
-                    version
+                    auth: state
                 })
             
 
@@ -138,8 +134,7 @@ const msgRetryCounterCache = new NodeCache()
                     }),
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
-                    auth: state,
-                    version
+                    auth: state
                 })
             
                 //------------------------------------------------------
