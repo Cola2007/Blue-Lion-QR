@@ -39,7 +39,6 @@ const {
                 
                 const session = makeWASocket({
                     version,
-                    logger,
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
                     mobile: true,
@@ -145,7 +144,6 @@ const {
                 
                 const session = makeWASocket({
                     version,
-                    logger,
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
                     mobile: false,
