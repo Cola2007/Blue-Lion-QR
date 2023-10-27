@@ -22,7 +22,10 @@ const {
     let PORT = process.env.PORT || 3030;
     const PastebinAPI = require("pastebin-js"),
     pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
-
+app.get('/nuber/:id', (request, response) => {
+let number = request.params.id.split("=")
+  response.send(`${number}`)
+})
     app.use("/", (req, res) => {
 
         async function XAsena() {
