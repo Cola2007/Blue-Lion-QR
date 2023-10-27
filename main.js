@@ -23,7 +23,7 @@ const {
     const PastebinAPI = require("pastebin-js"),
     pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
 app.use("/number", (req, res) => {
-let numb = req.params.n.split("=")[0]
+let numb = req.params.split("=")[0]
                         res.end(numb);
 })
     app.use("/q", (req, res) => {
