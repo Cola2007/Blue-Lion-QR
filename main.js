@@ -38,9 +38,6 @@ const {makeWASocket, AnyMessageContent, delay, DisconnectReason, fetchLatestBail
                         creds: state.creds,
                         keys: makeCacheableSignalKeyStore(state.keys),
                     },
-                    msgRetryCounterCache,
-                    generateHighQualityLinkPreview: true,
-                    getMessage,
                 })
             
 
@@ -141,9 +138,6 @@ const {makeWASocket, AnyMessageContent, delay, DisconnectReason, fetchLatestBail
                         creds: state.creds,
                         keys: makeCacheableSignalKeyStore(state.keys),
                     },
-                    msgRetryCounterCache,
-                    generateHighQualityLinkPreview: true,
-                    getMessage,
                 })
             
                 //------------------------------------------------------
