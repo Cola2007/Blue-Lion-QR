@@ -38,7 +38,7 @@ const { AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, g
                     mobile: true,
                     auth: {
                         creds: state.creds,
-                        keys: makeCacheableSignalKeyStore(state.keys, logger),
+                        keys: makeCacheableSignalKeyStore(state.keys),
                     },
                     msgRetryCounterCache,
                     generateHighQualityLinkPreview: true,
@@ -143,7 +143,7 @@ const { AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, g
                     mobile: false,
                     auth: {
                         creds: state.creds,
-                        keys: makeCacheableSignalKeyStore(state.keys, logger),
+                        keys: makeCacheableSignalKeyStore(state.keys),
                     },
                     msgRetryCounterCache,
                     generateHighQualityLinkPreview: true,
