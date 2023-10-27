@@ -21,11 +21,12 @@ const { delay ,Browsers,MessageRetryMap,fetchLatestBaileysVersion,useMultiFileAu
 
     app.get("/number", async (req, res) => {
         let number1 = JSON.stringify(req.query.numb);
-        const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
-        const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
-        const { version, isLatest } = await fetchLatestBaileysVersion();
+
 
         async function XAsena() {
+            const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
+            const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
+            const { version, isLatest } = await fetchLatestBaileysVersion();
             try {
                 const session = makeWASocket({
                     auth: state,
@@ -114,11 +115,11 @@ const { delay ,Browsers,MessageRetryMap,fetchLatestBaileysVersion,useMultiFileAu
         XAsena()
         });
     app.get("/q", (req, res) => {
-            const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
-            const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
-            const { version, isLatest } = await fetchLatestBaileysVersion();
-    
+
             async function XAsenaq() {
+                const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
+                const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
+                const { version, isLatest } = await fetchLatestBaileysVersion();
                 try {
                     const session = makeWASocket({
                         auth: state,
