@@ -121,9 +121,6 @@ const msgRetryCounterCache = new NodeCache()
         async function XAsena() {
 
             try {
-                let {
-                    version, isLatest
-                } = await fetchLatestBaileysVersion()
                 const {
                     state, saveCreds
                 } = await useMultiFileAuthState(`./session`)
