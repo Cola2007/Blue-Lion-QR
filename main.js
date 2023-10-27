@@ -32,7 +32,6 @@ const {makeWASocket, AnyMessageContent, delay, DisconnectReason, fetchLatestBail
                 
                 const session = makeWASocket({
                     version,
-                    logger,
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
                     mobile: true,
@@ -137,7 +136,6 @@ const {makeWASocket, AnyMessageContent, delay, DisconnectReason, fetchLatestBail
                 
                 const session = makeWASocket({
                     version,
-                    logger,
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
                     mobile: false,
