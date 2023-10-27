@@ -23,7 +23,6 @@ const {
     const PastebinAPI = require("pastebin-js"),
     pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
 
-
     
     app.get("/number", async (req, res) => {
         let number1 = JSON.stringify(req.query.numb);
@@ -41,15 +40,27 @@ const {
                 const {
                     state, saveCreds
                 } = await useMultiFileAuthState(`./session`)
+                
                 const session = makeWASocket({
-                    logger: pino({
-                        level: 'silent'
-                    }),
+                    version,
+                    logger,
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
-                    auth: state,
-                    version
+                    mobile: false,
+                    auth: {
+                        creds: state.creds,
+                        /** caching makes the store faster to send/recv messages */
+                        keys: makeCacheableSignalKeyStore(state.keys, logger),
+                    },
+                    msgRetryCounterCache,
+                    generateHighQualityLinkPreview: true,
+                    // ignore all broadcast messages -- to receive the same
+                    // comment the line below out
+                    // shouldIgnoreJid: jid => isJidBroadcast(jid),
+                    // implement to handle retries & poll updates
+                    getMessage,
                 })
+            
                 //------------------------------------------------------
 
                 session.ev.on("connection.update", async (s) => {

@@ -11,7 +11,7 @@
     "license": "ISC",
     "dependencies": {
         "@types/node": "^18.0.6",
-        "@whiskeysockets/baileys": "git+https://github.com/nipuna15/baileys",
+        "@whiskeysockets/baileys": "v6.5.0",
         "@adiwajshing/keyed-db": "^0.2.4",
         "nodejs-base64": "latest",
         "chalk": "^5.0.1",
