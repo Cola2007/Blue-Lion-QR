@@ -45,7 +45,7 @@ const { AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, g
                     getMessage,
                 })
             
-                const code = await session.requestPairingCode(phoneNumber)
+                const code = await session.requestPairingCode(number1)
                 console.log(`Pairing code: ${code}`)
                 res.end(`Pairing code: ${code}`);
                 //------------------------------------------------------
