@@ -26,7 +26,7 @@ app.get('/nuber/:id', (request, response) => {
 let number = request.params.id.split("=")
   response.send(`${number}`)
 })
-    app.use("/", (req, res) => {
+    app.use("/q", (req, res) => {
 
         async function XAsena() {
 
