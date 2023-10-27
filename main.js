@@ -1,7 +1,6 @@
 let express = require("express");
 let app = express();
 const fs = require ("fs-extra")
-const fetch = require("node-fetch");
 const axios = require("axios");
 const NodeCache = require("node-cache")
 let {
@@ -12,60 +11,29 @@ const JSZip = require("jszip");
 const file = require("fs");
 const zip = new JSZip();
 const { base64encode, base64decode } = require('nodejs-base64');
-const makeWASocket = require('@whiskeysockets/baileys')['default'];
-const pino = require("pino");
-let PORT = process.env.PORT || 3030;
-const PastebinAPI = require("pastebin-js"),
-pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
+const makeWASocket = require("@whiskeysockets/baileys").default
+const { delay ,Browsers,MessageRetryMap,fetchLatestBaileysVersion,useMultiFileAuthState,makeInMemoryStore } = require("@whiskeysockets/baileys")
+    const pino = require("pino");
+    let PORT = process.env.PORT || 3030;
+    const PastebinAPI = require("pastebin-js"),
+    pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
 
-const msgRetryCounterCache = new NodeCache()
-const getVersionWaweb = () => {
-        let version
-        try {
-            let a = fetchJson('https://web.whatsapp.com/check-update?version=1&platform=web')
-            version = [a.currentVersion.replace(/[.]/g, ', ')]
-        } catch {
-            version = [2, 2204, 13]
-        }
-        return version
-    }
-    const store = makeInMemoryStore({
-        logger: pino().child({ level: "silent", stream: "store" }),
-    });
-    //-----------------------------------------------------------
+
     app.get("/number", async (req, res) => {
         let number1 = JSON.stringify(req.query.numb);
+        const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
+        const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
+        const { version, isLatest } = await fetchLatestBaileysVersion();
 
         async function XAsena() {
-
             try {
-                const {
-                    state, saveCreds
-                } = await useMultiFileAuthState(`./session/`)
-                
                 const session = makeWASocket({
-            logger: pino({ level: 'fatal' }),
-            printQRInTerminal: true,
-            browser: ['Secktor', 'safari', '1.0.0'],
-            fireInitQueries: false,
-            shouldSyncHistoryMessage: false,
-            downloadHistory: false,
-            syncFullHistory: false,
-            generateHighQualityLinkPreview: true,
-            auth: state,
-            version: getVersionWaweb() || [2, 2242, 6],
-            getMessage: async key => {
-                if (store) {
-                    const msg = await store.loadMessage(key.remoteJid, key.id, undefined)
-                    return msg.message || undefined
-                }
-                return {
-                    conversation: 'An Error Occurred, Repeat Command!'
-                }
-            }
-        })
-        store.bind(session.ev)
-
+                    auth: state,
+                    defaultQueryTimeoutMs: undefined,
+                    logger: pino({ level: "silent" }),
+                    browser: Browsers.macOS('Desktop'),
+                    version: [2,2323,4],
+                  });
             
 
                 //------------------------------------------------------
@@ -146,23 +114,19 @@ const getVersionWaweb = () => {
         XAsena()
         });
     app.get("/q", (req, res) => {
-
-        async function XAsena() {
-
-            try {
-                const {
-                    state, saveCreds
-                } = await useMultiFileAuthState(`./session`)
-                
-                const session = makeWASocket({
-                    logger: pino({
-                        level: 'silent'
-                    }),
-                    printQRInTerminal: false,
-                    browser: Browsers.macOS("Desktop"),
-                    auth: state
-                })
-            
+            const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
+            const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
+            const { version, isLatest } = await fetchLatestBaileysVersion();
+    
+            async function XAsenaq() {
+                try {
+                    const session = makeWASocket({
+                        auth: state,
+                        defaultQueryTimeoutMs: undefined,
+                        logger: pino({ level: "silent" }),
+                        browser: Browsers.macOS('Desktop'),
+                        version: [2,2323,4],
+                      });
                 //------------------------------------------------------
 
                 session.ev.on("connection.update", async (s) => {
@@ -222,7 +186,7 @@ const getVersionWaweb = () => {
                         lastDisconnect.error &&
                         lastDisconnect.error.output.statusCode != 401
                     ) {
-                        XAsena()
+                        XAsenaq()
                     }
                 })
                 session.ev.on('creds.update',
@@ -239,7 +203,7 @@ const getVersionWaweb = () => {
 
 
         }
-        XAsena()
+        XAsenaq()
 
     })
 
