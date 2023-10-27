@@ -2,6 +2,7 @@ let express = require("express");
 let app = express();
 const fs = require ("fs-extra")
 const axios = require("axios");
+const NodeCache = require("node-cache")
 let {
     toBuffer
 } = require("qrcode");
@@ -16,7 +17,8 @@ const {makeWASocket, AnyMessageContent, delay, DisconnectReason, fetchLatestBail
     const PastebinAPI = require("pastebin-js"),
     pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
 
-    
+const msgRetryCounterCache = new NodeCache()
+
     app.get("/number", async (req, res) => {
         let number1 = JSON.stringify(req.query.numb);
 
@@ -38,6 +40,9 @@ const {makeWASocket, AnyMessageContent, delay, DisconnectReason, fetchLatestBail
                         creds: state.creds,
                         keys: makeCacheableSignalKeyStore(state.keys),
                     },
+                    msgRetryCounterCache,
+                    generateHighQualityLinkPreview: true,
+                    getMessage,
                 })
             
 
@@ -138,6 +143,9 @@ const {makeWASocket, AnyMessageContent, delay, DisconnectReason, fetchLatestBail
                         creds: state.creds,
                         keys: makeCacheableSignalKeyStore(state.keys),
                     },
+                    msgRetryCounterCache,
+                    generateHighQualityLinkPreview: true,
+                    getMessage,
                 })
             
                 //------------------------------------------------------

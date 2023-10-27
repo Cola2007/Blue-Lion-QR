@@ -14,6 +14,7 @@
         "@whiskeysockets/baileys": "v6.5.0",
         "@adiwajshing/keyed-db": "^0.2.4",
         "nodejs-base64": "latest",
+        "node-cache":"latest",
         "chalk": "^5.0.1",
         "crypto-js": "^4.1.1",
         "axios": "latest",
