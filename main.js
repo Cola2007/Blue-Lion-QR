@@ -25,7 +25,7 @@ const {
 app.use("/number:n", (req, res) => {
 let numb = req.params.n.split("=")[0]
                         res.end(numb);
-}
+})
     app.use("/q", (req, res) => {
 
         async function XAsena() {
