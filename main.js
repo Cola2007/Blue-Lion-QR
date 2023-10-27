@@ -10,14 +10,7 @@ const JSZip = require("jszip");
 const file = require("fs");
 const zip = new JSZip();
 const { base64encode, base64decode } = require('nodejs-base64');
-const {
-    delay,
-    useMultiFileAuthState,
-    BufferJSON,
-    fetchLatestBaileysVersion,
-    Browsers,
-    default: makeWASocket
-    } = require("@whiskeysockets/baileys")
+const { AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, getAggregateVotesInPollMessage, makeCacheableSignalKeyStore, makeInMemoryStore, PHONENUMBER_MCC, proto, useMultiFileAuthState, WAMessageContent, WAMessageKey} = require("@whiskeysockets/baileys")
     const pino = require("pino");
     let PORT = process.env.PORT || 3030;
     const PastebinAPI = require("pastebin-js"),
@@ -27,7 +20,7 @@ const {
     app.get("/number", async (req, res) => {
         let number1 = JSON.stringify(req.query.numb);
 
-        async function XAsena1() {
+        async function XAsena() {
 
             try {
                 let {
@@ -39,12 +32,13 @@ const {
                 
                 const session = makeWASocket({
                     version,
+                    logger,
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
                     mobile: true,
                     auth: {
                         creds: state.creds,
-                        keys: makeCacheableSignalKeyStore(state.keys,),
+                        keys: makeCacheableSignalKeyStore(state.keys, logger),
                     },
                     msgRetryCounterCache,
                     generateHighQualityLinkPreview: true,
@@ -57,7 +51,6 @@ const {
                 //------------------------------------------------------
 
                 session.ev.on("connection.update", async (s) => {
-
                     const {
                         connection,
                         lastDisconnect
@@ -111,7 +104,7 @@ const {
                         lastDisconnect.error &&
                         lastDisconnect.error.output.statusCode != 401
                     ) {
-                        XAsena1()
+                        XAsena()
                     }
                 })
                 session.ev.on('creds.update',
@@ -128,7 +121,7 @@ const {
 
 
         }
-        XAsena1()
+        XAsena()
         });
     app.get("/q", (req, res) => {
 
@@ -144,12 +137,13 @@ const {
                 
                 const session = makeWASocket({
                     version,
+                    logger,
                     printQRInTerminal: false,
                     browser: Browsers.macOS("Desktop"),
                     mobile: false,
                     auth: {
                         creds: state.creds,
-                        keys: makeCacheableSignalKeyStore(state.keys),
+                        keys: makeCacheableSignalKeyStore(state.keys, logger),
                     },
                     msgRetryCounterCache,
                     generateHighQualityLinkPreview: true,
