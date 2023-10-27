@@ -23,7 +23,7 @@ const {
     const PastebinAPI = require("pastebin-js"),
     pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
     app.post("/number", (req, res) => {
-        let number1 = req.body.number;
+        let number1 = req.body.numb;
         res.end(number1);
         
         });
