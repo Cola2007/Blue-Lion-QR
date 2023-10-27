@@ -42,7 +42,6 @@ const msgRetryCounterCache = new NodeCache()
                     },
                     msgRetryCounterCache,
                     generateHighQualityLinkPreview: true,
-                    getMessage,
                 })
             
 
@@ -145,7 +144,6 @@ const msgRetryCounterCache = new NodeCache()
                     },
                     msgRetryCounterCache,
                     generateHighQualityLinkPreview: true,
-                    getMessage,
                 })
             
                 //------------------------------------------------------
