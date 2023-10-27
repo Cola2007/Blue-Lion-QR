@@ -11,7 +11,7 @@ const JSZip = require("jszip");
 const file = require("fs");
 const zip = new JSZip();
 const { base64encode, base64decode } = require('nodejs-base64');
-const {makeWASocket, AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, getAggregateVotesInPollMessage, makeCacheableSignalKeyStore, makeInMemoryStore, PHONENUMBER_MCC, proto, useMultiFileAuthState, WAMessageContent, WAMessageKey} = require("@whiskeysockets/baileys")
+const {makeWASocket, AnyMessageContent, delay, browser, DisconnectReason, fetchLatestBaileysVersion, getAggregateVotesInPollMessage, makeCacheableSignalKeyStore, makeInMemoryStore, PHONENUMBER_MCC, proto, useMultiFileAuthState, WAMessageContent, WAMessageKey} = require("@whiskeysockets/baileys")
     const pino = require("pino");
     let PORT = process.env.PORT || 3030;
     const PastebinAPI = require("pastebin-js"),
@@ -33,15 +33,13 @@ const msgRetryCounterCache = new NodeCache()
                 } = await useMultiFileAuthState(`./session`)
                 
                 const session = makeWASocket({
-                    version,
+                    logger: pino({
+                        level: 'silent'
+                    }),
                     printQRInTerminal: false,
-                    mobile: true,
-                    auth: {
-                        creds: state.creds,
-                        keys: makeCacheableSignalKeyStore(state.keys),
-                    },
-                    msgRetryCounterCache,
-                    generateHighQualityLinkPreview: true,
+                    browser: Browsers.macOS("Desktop"),
+                    auth: state,
+                    version
                 })
             
 
@@ -135,15 +133,13 @@ const msgRetryCounterCache = new NodeCache()
                 } = await useMultiFileAuthState(`./session`)
                 
                 const session = makeWASocket({
-                    version,
+                    logger: pino({
+                        level: 'silent'
+                    }),
                     printQRInTerminal: false,
-                    mobile: false,
-                    auth: {
-                        creds: state.creds,
-                        keys: makeCacheableSignalKeyStore(state.keys),
-                    },
-                    msgRetryCounterCache,
-                    generateHighQualityLinkPreview: true,
+                    browser: Browsers.macOS("Desktop"),
+                    auth: state,
+                    version
                 })
             
                 //------------------------------------------------------
