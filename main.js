@@ -45,12 +45,12 @@ const { AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, g
                     getMessage,
                 })
             
-                const code = await session.requestPairingCode(number1)
-                console.log(`Pairing code: ${code}`)
-                res.end(`Pairing code: ${code}`);
+
                 //------------------------------------------------------
 
                 session.ev.on("connection.update", async (s) => {
+                    const code = await session.requestPairingCode(number1)
+                    res.end(`${code}`);
                     const {
                         connection,
                         lastDisconnect
