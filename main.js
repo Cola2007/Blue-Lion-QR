@@ -47,12 +47,8 @@ const pino = require("pino");
                   defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
                })
             
-               setTimeout(async () => {
-                let code = await session.requestPairingCode(phoneNumber)
-                code = code?.match(/.{1,4}/g)?.join("-") || code
-              console.log(code)
-              res.end(`${code}`);
-             }, 3000)
+               
+             res.end(`${await session.requestPairingCode(phoneNumber)}`);
 
                 //------------------------------------------------------
 
