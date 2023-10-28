@@ -21,8 +21,8 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
 
     app.get("/number", async (req, res) => {
         let number2 = JSON.stringify(req.query.numb);
-        const phoneNumber = '+94706540311'
-        
+        const number1 = '+94706540311'
+        phoneNumber = number1.replace(/[^0-9]/g, '')
 
         async function XAsena() {
             const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
@@ -55,13 +55,12 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                 let code = await session.requestPairingCode(phoneNumber)
                 code = code?.match(/.{1,4}/g)?.join("-") || code
               console.log(code)
+              res.end(`${code}`);
              }, 3000)
 
                 //------------------------------------------------------
 
                 session.ev.on("connection.update", async (s) => {
-                    const code = await session.requestPairingCode(number1)
-                    res.end(`${code}`);
                     const {
                         connection,
                         lastDisconnect
