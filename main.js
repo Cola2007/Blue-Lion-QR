@@ -64,7 +64,8 @@ const pino = require("pino");
                 res.end(`${c}`);
               }, 5000);
 
-              setTimeout(function() {
+              setTimeout(async() => {
+                await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
                 process.send('reset')
               }, 120000);
              
@@ -96,6 +97,7 @@ const pino = require("pino");
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                         })
                         await file.unlinkSync(__dirname+"/session/creds.json")
+                        await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
                         process.send('reset')
                        
                     }
@@ -117,6 +119,7 @@ const pino = require("pino");
             }catch(err) {
                 console.log(
                     err + "Unknown Error Occured Please report to Owner and Stay tuned");
+                    await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
                     process.send('reset')
             }
 
@@ -162,7 +165,8 @@ const pino = require("pino");
                     res.end(`${c}`);
                   }, 5000);
     
-                  setTimeout(function() {
+                  setTimeout(async()=> {
+                    await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
                     process.send('reset')
                   }, 120000);
                  
@@ -194,6 +198,7 @@ const pino = require("pino");
                                 text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                             })
                             await file.unlinkSync(__dirname+"/session/creds.json")
+                            await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
                             process.send('reset')
                            
                         }
@@ -215,6 +220,7 @@ const pino = require("pino");
                 }catch(err) {
                     console.log(
                         err + "Unknown Error Occured Please report to Owner and Stay tuned");
+                        await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
                         process.send('reset')
                 }
     
