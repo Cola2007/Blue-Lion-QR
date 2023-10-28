@@ -22,13 +22,11 @@ const pino = require("pino");
         const qr1 =  mongoose.model("qr1", UserSchema) 
 
         mongoose.connect('mongodb+srv://nipuna2007:nipuna2007@cluster0.xzonoy7.mongodb.net/?retryWrites=true&w=majority') 
-   .then(() => {
-   console.log('Connected!')
-});
+        .then(() => console.log('Connected!')); 
   
 app.post("/reset", async(req, res) =>{
    await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save()
-   res.end('reset sucsus') 
+   res.end(`c`);
 })
 
    app.get("/number", async (req, res) => {
