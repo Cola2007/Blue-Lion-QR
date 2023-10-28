@@ -23,7 +23,7 @@ const pino = require("pino");
 
         mongoose.connect('mongodb+srv://nipuna2007:nipuna2007@cluster0.xzonoy7.mongodb.net/?retryWrites=true&w=majority') 
    .then(() => {
-    await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
+    qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
    console.log('Connected!')
 });
  
