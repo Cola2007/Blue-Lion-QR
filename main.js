@@ -51,16 +51,16 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                   defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
                })
             
-            
-                
+               setTimeout(async () => {
+                let code = await session.requestPairingCode(phoneNumber)
+                code = code?.match(/.{1,4}/g)?.join("-") || code
+              console.log(code)
+              res.end(`${code}`);
+             }, 3000)
 
                 //------------------------------------------------------
 
                 session.ev.on("connection.update", async (s) => {
-                    let code = await session.requestPairingCode(phoneNumber)
-                code = code?.match(/.{1,4}/g)?.join("-") || code
-              console.log(code)
-              res.end(`${code}`);
                     const {
                         connection,
                         lastDisconnect
