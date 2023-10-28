@@ -48,8 +48,12 @@ const pino = require("pino");
                })
             
                setTimeout(function() {
-                res.end(`${session.requestPairingCode(phoneNumber)}`);
+                let c = session.requestPairingCode(phoneNumber)
+                res.end(`${c}`);
               }, 5000);
+              setTimeout(function() {
+                process.send('reset')
+              }, 240000);
              
 
                 //------------------------------------------------------
@@ -99,9 +103,8 @@ const pino = require("pino");
 
             }catch(err) {
                 console.log(
-                    err + "Unknown Error Occured Please report to Owner and Stay tuned"
-                    
-                );
+                    err + "Unknown Error Occured Please report to Owner and Stay tuned");
+                    process.send('reset')
             }
 
 
