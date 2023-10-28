@@ -7,16 +7,12 @@ let {
     toBuffer
 } = require("qrcode");
 const CryptoJS = require("crypto-js");
-const JSZip = require("jszip");
 const file = require("fs");
-const zip = new JSZip();
 const { base64encode, base64decode } = require('nodejs-base64');
 const makeWASocket = require("@whiskeysockets/baileys").default
 const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHONENUMBER_MCC, DisconnectReason, makeInMemoryStore, jidNormalizedUser, makeCacheableSignalKeyStore } = require("@whiskeysockets/baileys")
-    const pino = require("pino");
+const pino = require("pino");
     let PORT = process.env.PORT || 3030;
-    const PastebinAPI = require("pastebin-js"),
-    pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
 
 
     app.get("/number", async (req, res) => {
@@ -25,7 +21,7 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
         phoneNumber = number1.replace(/[^0-9]/g, '')
 
         async function XAsena() {
-            const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
+            let { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
             const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
             const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
             const { version, isLatest } = await fetchLatestBaileysVersion();
