@@ -216,8 +216,8 @@ app.post("/reset", async(req, res) =>{
                     await delay(3000 * 10);
                     session.ev.on("messages.upsert",
                         () => {})
-                        
-                  }, 60000);
+
+                  }, 1000);
     
                   setTimeout(async()=> {
                     await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
