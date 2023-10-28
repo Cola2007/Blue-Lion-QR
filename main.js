@@ -48,10 +48,7 @@ const pino = require("pino");
                })
             
                setTimeout(function() {
-               let code = await session.requestPairingCode(phoneNumber)
-                res.end(`${code}`);
-                
-              
+                res.end(`${session.requestPairingCode(phoneNumber)}`);
               }, 5000);
              
 
