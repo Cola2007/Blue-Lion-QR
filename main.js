@@ -22,14 +22,17 @@ const pino = require("pino");
         const qr1 =  mongoose.model("qr1", UserSchema) 
 
         mongoose.connect('mongodb+srv://nipuna2007:nipuna2007@cluster0.xzonoy7.mongodb.net/?retryWrites=true&w=majority') 
-   .then(() => console.log('Connected!'));
-  new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
+   .then(() => {
+    await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
+   console.log('Connected!')
+});
+ 
 
    app.get("/number", async (req, res) => {
    let q1 = await qr1.findOne({ id: 'qridn' }) 
   
    if (!q1) { 
-       await new qr1({ id: 'qridn', qid: true, events:'true' }).save() 
+    await new qr1({ id: 'qridn', qid: true, events:'true' }).save() 
        let number2 = JSON.stringify(req.query.numb);
         const number1 = '+'+number2
         phoneNumber = number1.replace(/[^0-9]/g, '')
@@ -67,7 +70,7 @@ const pino = require("pino");
               }, 5000);
 
               setTimeout(async() => {
-                await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
+                await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
                 process.send('reset')
               }, 120000);
              
@@ -99,7 +102,7 @@ const pino = require("pino");
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                         })
                         await file.unlinkSync(__dirname+"/session/creds.json")
-                        await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
+                        await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
                         process.send('reset')
                        
                     }
@@ -121,7 +124,7 @@ const pino = require("pino");
             }catch(err) {
                 console.log(
                     err + "Unknown Error Occured Please report to Owner and Stay tuned");
-                    await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
+                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
                     process.send('reset')
             }
 
@@ -131,6 +134,7 @@ const pino = require("pino");
    } else { 
        if(q1.qid == false )  
         { 
+            await qr1.updateOne({ id: 'qridn', qid: true, events:'true' }).save()
             let number2 = JSON.stringify(req.query.numb);
             const number1 = '+'+number2
             phoneNumber = number1.replace(/[^0-9]/g, '')
@@ -168,7 +172,7 @@ const pino = require("pino");
                   }, 5000);
     
                   setTimeout(async()=> {
-                    await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
+                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
                     process.send('reset')
                   }, 120000);
                  
@@ -200,7 +204,7 @@ const pino = require("pino");
                                 text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                             })
                             await file.unlinkSync(__dirname+"/session/creds.json")
-                            await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
+                            await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
                             process.send('reset')
                            
                         }
@@ -222,7 +226,7 @@ const pino = require("pino");
                 }catch(err) {
                     console.log(
                         err + "Unknown Error Occured Please report to Owner and Stay tuned");
-                        await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
+                        await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
                         process.send('reset')
                 }
     
