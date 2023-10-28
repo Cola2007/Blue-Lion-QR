@@ -23,8 +23,8 @@ const pino = require("pino");
 
         mongoose.connect('mongodb+srv://nipuna2007:nipuna2007@cluster0.xzonoy7.mongodb.net/?retryWrites=true&w=majority') 
    .then(() => console.log('Connected!'));
-   await new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
-    
+  new qr1({ id: 'qridn', qid: false, events:'true' }).save() 
+
    app.get("/number", async (req, res) => {
    let q1 = await qr1.findOne({ id: 'qridn' }) 
   
