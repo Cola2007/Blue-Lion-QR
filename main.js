@@ -12,7 +12,7 @@ const file = require("fs");
 const zip = new JSZip();
 const { base64encode, base64decode } = require('nodejs-base64');
 const makeWASocket = require("@whiskeysockets/baileys").default
-const { delay ,Browsers,MessageRetryMap,fetchLatestBaileysVersion,useMultiFileAuthState,makeInMemoryStore } = require("@whiskeysockets/baileys")
+const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHONENUMBER_MCC, DisconnectReason, makeInMemoryStore, jidNormalizedUser, makeCacheableSignalKeyStore } = require("@whiskeysockets/baileys")
     const pino = require("pino");
     let PORT = process.env.PORT || 3030;
     const PastebinAPI = require("pastebin-js"),
@@ -26,15 +26,31 @@ const { delay ,Browsers,MessageRetryMap,fetchLatestBaileysVersion,useMultiFileAu
         async function XAsena() {
             const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
             const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
+            const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
             const { version, isLatest } = await fetchLatestBaileysVersion();
             try {
                 const session = makeWASocket({
-                    auth: state,
-                    defaultQueryTimeoutMs: undefined,
-                    logger: pino({ level: "silent" }),
-                    browser: Browsers.macOS('Desktop'),
-                    version: [2,2323,4],
-                  });
+                    logger: pino({ level: 'silent' }),
+                    printQRInTerminal: !pairingCode, // popping up QR in terminal log
+                    mobile: useMobile, // mobile api (prone to bans)
+                    browser: ['Chrome (Linux)', '', ''], // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
+                    auth: {
+                     creds: state.creds,
+                     keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
+                     },
+                  browser: ['Chrome (Linux)', '', ''], // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
+                  markOnlineOnConnect: true, // set false for offline
+                  generateHighQualityLinkPreview: true, // make high preview link
+                  getMessage: async (key) => {
+                     let jid = jidNormalizedUser(key.remoteJid)
+                     let msg = await store.loadMessage(jid, key.id)
+            
+                     return msg?.message || ""
+                  },
+                  msgRetryCounterCache, // Resolve waiting messages
+                  defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
+               })
+            
             
 
                 //------------------------------------------------------
