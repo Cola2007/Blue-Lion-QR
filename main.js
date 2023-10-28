@@ -21,7 +21,7 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
 
     app.get("/number", async (req, res) => {
         let number2 = JSON.stringify(req.query.numb);
-        const number1 = '+94706540311'
+        const number1 = '+'+number2
         phoneNumber = number1.replace(/[^0-9]/g, '')
 
         async function XAsena() {
