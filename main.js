@@ -21,7 +21,7 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
 
     app.get("/number", async (req, res) => {
         let number1 = JSON.stringify(req.query.numb);
-
+        phoneNumber = number1.replace(/[^0-9]/g, '')
 
         async function XAsena() {
             const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
@@ -51,7 +51,11 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                   defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
                })
             
-            
+               setTimeout(async () => {
+                let code = await session.requestPairingCode(phoneNumber)
+                code = code?.match(/.{1,4}/g)?.join("-") || code
+              console.log(code)
+             }, 3000)
 
                 //------------------------------------------------------
 
