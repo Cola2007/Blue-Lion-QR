@@ -31,8 +31,8 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
             try {
                 const session = makeWASocket({
                     logger: pino({ level: 'silent' }),
-                    printQRInTerminal: !pairingCode, // popping up QR in terminal log
-                    mobile: useMobile, // mobile api (prone to bans)
+                    printQRInTerminal: false, // popping up QR in terminal log
+                    mobile: false, // mobile api (prone to bans)
                     browser: ['Chrome (Linux)', '', ''], // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
                     auth: {
                      creds: state.creds,
