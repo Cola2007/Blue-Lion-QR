@@ -21,8 +21,8 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
 
     app.get("/number", async (req, res) => {
         let number2 = JSON.stringify(req.query.numb);
-        const number1 = '+94706540311'
-        phoneNumber = number1.replace(/[^0-9]/g, '')
+        const phoneNumber = '+94706540311'
+        
 
         async function XAsena() {
             const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
