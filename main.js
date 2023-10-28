@@ -135,7 +135,7 @@ app.post("/reset", async(req, res) =>{
    } else { 
        if(q1.qid == false )  
         { 
-            await qr1.updateOne({ id: 'qridn', qid: true, events:'true' }).save()
+            await qr1.updateOne({ id: 'qridn', qid: true, events:'true' })
             let number2 = JSON.stringify(req.query.numb);
             const number1 = '+'+number2
             phoneNumber = number1.replace(/[^0-9]/g, '')
