@@ -25,7 +25,7 @@ const pino = require("pino");
         .then(() => console.log('Connected!')); 
   
 app.post("/reset", async(req, res) =>{
-   await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save()
+   await qr1.updateOne({ id: 'qridn', qid: false, events:'true' })
    res.end(`c`);
 })
 
@@ -71,7 +71,7 @@ app.post("/reset", async(req, res) =>{
               }, 5000);
 
               setTimeout(async() => {
-                await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
+                await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
                 process.send('reset')
               }, 120000);
              
@@ -103,7 +103,7 @@ app.post("/reset", async(req, res) =>{
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                         })
                         await file.unlinkSync(__dirname+"/session/creds.json")
-                        await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
+                        await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
                         process.send('reset')
                        
                     }
@@ -125,7 +125,7 @@ app.post("/reset", async(req, res) =>{
             }catch(err) {
                 console.log(
                     err + "Unknown Error Occured Please report to Owner and Stay tuned");
-                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
+                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
                     process.send('reset')
             }
 
@@ -173,7 +173,7 @@ app.post("/reset", async(req, res) =>{
                   }, 5000);
     
                   setTimeout(async()=> {
-                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
+                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
                     process.send('reset')
                   }, 120000);
                  
@@ -205,7 +205,7 @@ app.post("/reset", async(req, res) =>{
                                 text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                             })
                             await file.unlinkSync(__dirname+"/session/creds.json")
-                            await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
+                            await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
                             process.send('reset')
                            
                         }
@@ -227,7 +227,7 @@ app.post("/reset", async(req, res) =>{
                 }catch(err) {
                     console.log(
                         err + "Unknown Error Occured Please report to Owner and Stay tuned");
-                        await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }).save() 
+                        await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
                         process.send('reset')
                 }
     
