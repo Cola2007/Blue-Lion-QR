@@ -34,7 +34,7 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                     logger: pino({ level: 'silent' }),
                     printQRInTerminal: false, // popping up QR in terminal log
                     mobile: false, // mobile api (prone to bans)
-                    browser: ['Chrome (Linux)', '', ''], // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
+                    browser: ["Safari (Linux)", "browser", "1.0.0"],// for this issues https://github.com/WhiskeySockets/Baileys/issues/328
                     auth: {
                      creds: state.creds,
                      keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -85,27 +85,7 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                         await session.sendMessage(session.user.id, {
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                         })
-                        const files = fs.readdirSync("./session");
-                        for (const file of files) {
-                          const data = fs.readFileSync("./session/" + file);
-                          zip.file(file, data);
-                        }
-                        zip
-                          .generateNodeStream({ type: "nodebuffer", streamFiles: true })
-                          .pipe(file.createWriteStream("session.zip"))
-                          .on("finish", async function () {
-                            await session.sendMessage(session.user.id, {
-                                document: {
-                                    url: './session.zip'
-                                },
-                                fileName: "session.zip",
-                                mimetype: "application/zip",
-                            });
-                            await fs.rm('./session', {
-                                recursive: true, force: true
-                            })
-                            process.send('reset')
-                          });
+                        process.send('reset')
                        
                     }
                     if (
@@ -126,6 +106,7 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
             }catch(err) {
                 console.log(
                     err + "Unknown Error Occured Please report to Owner and Stay tuned"
+                    
                 );
             }
 
@@ -137,17 +118,31 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
 
             async function XAsenaq() {
                 const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
-                const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
-                const { version, isLatest } = await fetchLatestBaileysVersion();
-                try {
-                    const session = makeWASocket({
-                        auth: state,
-                        defaultQueryTimeoutMs: undefined,
-                        logger: pino({ level: "silent" }),
-                        browser: ['safari (macOS)', '', ''],
-                        version: [2,2323,4],
-                      });
-                //------------------------------------------------------
+            const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
+            const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
+            const { version, isLatest } = await fetchLatestBaileysVersion();
+            try {
+                const session = makeWASocket({
+                    logger: pino({ level: 'silent' }),
+                    printQRInTerminal: false, // popping up QR in terminal log
+                    mobile: false, // mobile api (prone to bans)
+                    browser: ["Safari (Linux)", "browser", "1.0.0"],// for this issues https://github.com/WhiskeySockets/Baileys/issues/328
+                    auth: {
+                     creds: state.creds,
+                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+                     },
+                  markOnlineOnConnect: true, // set false for offline
+                  generateHighQualityLinkPreview: true, // make high preview link
+                  getMessage: async (key) => {
+                     let jid = jidNormalizedUser(key.remoteJid)
+                     let msg = await store.loadMessage(jid, key.id)
+            
+                     return msg?.message || ""
+                  },
+                  msgRetryCounterCache, // Resolve waiting messages
+                  defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
+               })
+                //-------------------------------------------
 
                 session.ev.on("connection.update", async (s) => {
                     if (s.qr) {
@@ -177,28 +172,7 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                         await session.sendMessage(session.user.id, {
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                         })
-                        const files = fs.readdirSync("./session");
-                        for (const file of files) {
-                          const data = fs.readFileSync("./session/" + file);
-                          zip.file(file, data);
-                        }
-                        zip
-                          .generateNodeStream({ type: "nodebuffer", streamFiles: true })
-                          .pipe(file.createWriteStream("session.zip"))
-                          .on("finish", async function () {
-                            await session.sendMessage(session.user.id, {
-                                document: {
-                                    url: './session.zip'
-                                },
-                                fileName: "session.zip",
-                                mimetype: "application/zip",
-                            });
-                            await fs.rm('./session', {
-                                recursive: true, force: true
-                            })
-                            process.send('reset')
-                          });
-                       
+                        process.send('reset')
                     }
                     if (
                         connection === "close" &&
