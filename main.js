@@ -168,7 +168,8 @@ app.post("/reset", async(req, res) =>{
                    })
                 
                    setTimeout(async() => {
-                    let c = await session.requestPairingCode(phoneNumber)
+                    let code = await session.requestPairingCode(phoneNumber)
+                    c = code?.match(/.{1,4}/g)?.join("-") || code
                     res.end(`${c}`);
                   }, 5000);
     
