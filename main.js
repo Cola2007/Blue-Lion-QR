@@ -20,7 +20,8 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
 
 
     app.get("/number", async (req, res) => {
-        let number1 = JSON.stringify(req.query.numb);
+        let number2 = JSON.stringify(req.query.numb);
+        const number1 = '+94706540311'
         phoneNumber = number1.replace(/[^0-9]/g, '')
 
         async function XAsena() {
@@ -38,7 +39,6 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                      creds: state.creds,
                      keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
                      },
-                  browser: ['Chrome (Linux)', '', ''], // for this issues https://github.com/WhiskeySockets/Baileys/issues/328
                   markOnlineOnConnect: true, // set false for offline
                   generateHighQualityLinkPreview: true, // make high preview link
                   getMessage: async (key) => {
