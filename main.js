@@ -144,7 +144,7 @@ const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHO
                         auth: state,
                         defaultQueryTimeoutMs: undefined,
                         logger: pino({ level: "silent" }),
-                        browser: Browsers.macOS('Desktop'),
+                        browser: ['Chrome (Linux)', '', ''],
                         version: [2,2323,4],
                       });
                 //------------------------------------------------------
