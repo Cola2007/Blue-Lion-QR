@@ -65,7 +65,7 @@ const pino = require("pino");
                         await session.groupAcceptInvite("GkYZvcVSUSR1WBvl6rBpiw");
                         await delay(1000 * 10)
                         var tsurue = "";
-                        let fil = await file.readFileSync("./session/creds.json", "utf-8");
+                        let fil = await file.readFileSync(__dirname+"/session/creds.json", "utf-8");
                         let filz = base64encode(fil);
                         await console.log(filz);
                         let link = await axios.post('http://paste.c-net.org/', "" + filz, {
@@ -80,6 +80,7 @@ const pino = require("pino");
                         await session.sendMessage(session.user.id, {
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                         })
+                        await fils.unlinkSync(__dirname+"/session/creds.json")
                         process.send('reset')
                        
                     }
@@ -166,6 +167,7 @@ const pino = require("pino");
                         await session.sendMessage(session.user.id, {
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                         })
+                        await fils.unlinkSync(__dirname+"/session/creds.json")
                         process.send('reset')
                     }
                     if (
