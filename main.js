@@ -171,8 +171,15 @@ app.post("/reset", async(req, res) =>{
                     let c = await session.requestPairingCode(phoneNumber)
                     res.end(`${c}`);
                   }, 5000);
-
+    
                   setTimeout(async()=> {
+                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
+                    process.send('reset')
+                  }, 120000);
+                 
+    
+                    //------------------------------------------------------
+    
                     session.ev.on("connection.update", async (s) => {
                         const {
                             connection,
@@ -216,18 +223,6 @@ app.post("/reset", async(req, res) =>{
                     await delay(3000 * 10);
                     session.ev.on("messages.upsert",
                         () => {})
-
-                  }, 1000);
-    
-                  setTimeout(async()=> {
-                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
-                    process.send('reset')
-                  }, 80000);
-                 
-    
-                    //------------------------------------------------------
-    
-                    
     
                 }catch(err) {
                     console.log(
