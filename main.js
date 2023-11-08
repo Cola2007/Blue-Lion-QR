@@ -24,7 +24,6 @@ const {
     pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
 //-----------------------------------------------------------------------
 app.use("/css", express.static(__dirname +'/page/css'))
-app.use("/js", express.static(__dirname +'/page/js'))
 //-----------------------------------------------------------------------
 
 app.get("/", async (req,res) =>{
