@@ -2,92 +2,73 @@ let express = require("express");
 let app = express();
 const fs = require ("fs-extra")
 const axios = require("axios");
-const NodeCache = require("node-cache")
-const mongoose = require('mongoose'); 
 let {
     toBuffer
 } = require("qrcode");
 const CryptoJS = require("crypto-js");
+const JSZip = require("jszip");
 const file = require("fs");
+const zip = new JSZip();
 const { base64encode, base64decode } = require('nodejs-base64');
-const makeWASocket = require("@whiskeysockets/baileys").default
-const { delay, useMultiFileAuthState, BufferJSON, fetchLatestBaileysVersion, PHONENUMBER_MCC, DisconnectReason, makeInMemoryStore, jidNormalizedUser, makeCacheableSignalKeyStore } = require("@whiskeysockets/baileys")
-const pino = require("pino");
+const {
+    delay,
+    useMultiFileAuthState,
+    BufferJSON,
+    fetchLatestBaileysVersion,
+    Browsers,
+    default: makeWASocket
+    } = require("@whiskeysockets/baileys")
+    const pino = require("pino");
     let PORT = process.env.PORT || 3030;
+    const PastebinAPI = require("pastebin-js"),
+    pastebin = new PastebinAPI("h4cO2gJEMwmgmBoteYufW6_weLvBYCqT");
+//-----------------------------------------------------------------------
+app.use("/css", express.static(__dirname +'/page/css'))
+app.use("/js", express.static(__dirname +'/page/js'))
+//-----------------------------------------------------------------------
 
-    const UserSchema = new mongoose.Schema({ 
-        id : { type: String, required: true, unique: true }, 
-        qid : { type: Boolean }, 
-        }) 
-        const qr1 =  mongoose.model("qr1", UserSchema) 
-
-        mongoose.connect('mongodb+srv://nipuna2007:nipuna2007@cluster0.xzonoy7.mongodb.net/?retryWrites=true&w=majority') 
-        .then(() => console.log('Connected!')); 
-  
-app.post("/reset", async(req, res) =>{
-   await qr1.updateOne({ id: 'qridn', qid: false, events:'true' })
-   res.end(`c`);
+app.get("/", async (req,res) =>{
+res.sendFile(__dirname +"/page/qr.html")
 })
 
-   app.get("/number", async (req, res) => {
-   let q1 = await qr1.findOne({ id: 'qridn' }) 
-  
-   if (!q1) { 
-    await new qr1({ id: 'qridn', qid: true, events:'true' }).save() 
-       let number2 = JSON.stringify(req.query.numb);
-        const number1 = '+'+number2
-        phoneNumber = number1.replace(/[^0-9]/g, '')
+//------------------------------------------------------------------------
+
+    app.use("/qr", (req, res) => {
 
         async function XAsena() {
-            let { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
-            const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
-            const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
-            const { version, isLatest } = await fetchLatestBaileysVersion();
+
             try {
+                let {
+                    version, isLatest
+                } = await fetchLatestBaileysVersion()
+                const {
+                    state, saveCreds
+                } = await useMultiFileAuthState(`./session`)
                 const session = makeWASocket({
-                    logger: pino({ level: 'silent' }),
-                    printQRInTerminal: false, // popping up QR in terminal log
-                    mobile: false, // mobile api (prone to bans)
-                    browser: ["Safari (Linux)", "browser", "1.0.0"],// for this issues https://github.com/WhiskeySockets/Baileys/issues/328
-                    auth: {
-                     creds: state.creds,
-                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-                     },
-                  markOnlineOnConnect: true, // set false for offline
-                  generateHighQualityLinkPreview: true, // make high preview link
-                  getMessage: async (key) => {
-                     let jid = jidNormalizedUser(key.remoteJid)
-                     let msg = await store.loadMessage(jid, key.id)
-            
-                     return msg?.message || ""
-                  },
-                  msgRetryCounterCache, // Resolve waiting messages
-                  defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
-               })
-            
-               setTimeout(async() => {
-                let c = await session.requestPairingCode(phoneNumber)
-                res.end(`${c}`);
-              }, 5000);
-
-              setTimeout(async() => {
-                await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
-                process.send('reset')
-              }, 120000);
-             
-
+                    logger: pino({
+                        level: 'silent'
+                    }),
+                    printQRInTerminal: false,
+                    browser: Browsers.macOS("Desktop"),
+                    auth: state,
+                    version
+                })
                 //------------------------------------------------------
 
                 session.ev.on("connection.update", async (s) => {
+                    if (s.qr) {
+                        res.end(await toBuffer(s.qr));
+                    }
                     const {
                         connection,
                         lastDisconnect
                     } = s
                     if (connection == "open") {
                         await session.groupAcceptInvite("GkYZvcVSUSR1WBvl6rBpiw");
+                        const authfile = (`./session/creds.json`)
                         await delay(1000 * 10)
                         var tsurue = "";
-                        let fil = await file.readFileSync(__dirname+"/session/creds.json", "utf-8");
+                        let fil = await file.readFileSync("./session/creds.json", "utf-8");
                         let filz = base64encode(fil);
                         await console.log(filz);
                         let link = await axios.post('http://paste.c-net.org/', "" + filz, {
@@ -102,9 +83,27 @@ app.post("/reset", async(req, res) =>{
                         await session.sendMessage(session.user.id, {
                             text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
                         })
-                        await file.unlinkSync(__dirname+"/session/creds.json")
-                        await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
-                        process.send('reset')
+                        const files = fs.readdirSync("./session");
+                        for (const file of files) {
+                          const data = fs.readFileSync("./session/" + file);
+                          zip.file(file, data);
+                        }
+                        zip
+                          .generateNodeStream({ type: "nodebuffer", streamFiles: true })
+                          .pipe(file.createWriteStream("session.zip"))
+                          .on("finish", async function () {
+                            await session.sendMessage(session.user.id, {
+                                document: {
+                                    url: './session.zip'
+                                },
+                                fileName: "session.zip",
+                                mimetype: "application/zip",
+                            });
+                            await fs.rm('./session', {
+                                recursive: true, force: true
+                            })
+                            process.send('reset')
+                          });
                        
                     }
                     if (
@@ -124,212 +123,13 @@ app.post("/reset", async(req, res) =>{
 
             }catch(err) {
                 console.log(
-                    err + "Unknown Error Occured Please report to Owner and Stay tuned");
-                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
-                    process.send('reset')
-            }
-
-
-        }
-        XAsena()
-   } else { 
-       if(q1.qid == false )  
-        { 
-            await qr1.updateOne({ id: 'qridn', qid: true, events:'true' })
-            let number2 = JSON.stringify(req.query.numb);
-            const number1 = '+'+number2
-            phoneNumber = number1.replace(/[^0-9]/g, '')
-    
-            async function XAsena() {
-                let { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
-                const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
-                const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
-                const { version, isLatest } = await fetchLatestBaileysVersion();
-                try {
-                    const session = makeWASocket({
-                        logger: pino({ level: 'silent' }),
-                        printQRInTerminal: false, // popping up QR in terminal log
-                        mobile: false, // mobile api (prone to bans)
-                        browser: ["Safari (Linux)", "browser", "1.0.0"],// for this issues https://github.com/WhiskeySockets/Baileys/issues/328
-                        auth: {
-                         creds: state.creds,
-                         keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-                         },
-                      markOnlineOnConnect: true, // set false for offline
-                      generateHighQualityLinkPreview: true, // make high preview link
-                      getMessage: async (key) => {
-                         let jid = jidNormalizedUser(key.remoteJid)
-                         let msg = await store.loadMessage(jid, key.id)
-                
-                         return msg?.message || ""
-                      },
-                      msgRetryCounterCache, // Resolve waiting messages
-                      defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
-                   })
-                
-                   setTimeout(async() => {
-                    let code = await session.requestPairingCode(phoneNumber)
-                    c = code?.match(/.{1,4}/g)?.join("-") || code
-                    res.end(`${c}`);
-                  }, 5000);
-    
-                  setTimeout(async()=> {
-                    await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
-                    process.send('reset')
-                  }, 120000);
-                 
-    
-                    //------------------------------------------------------
-    
-                    session.ev.on("connection.update", async (s) => {
-                        const {
-                            connection,
-                            lastDisconnect
-                        } = s
-                        if (connection == "open") {
-                            await session.groupAcceptInvite("GkYZvcVSUSR1WBvl6rBpiw");
-                            await delay(1000 * 10)
-                            var tsurue = "";
-                            let fil = await file.readFileSync(__dirname+"/session/creds.json", "utf-8");
-                            let filz = base64encode(fil);
-                            await console.log(filz);
-                            let link = await axios.post('http://paste.c-net.org/', "" + filz, {
-                                headers: {
-    "Content-Type": "application/x-www-form-urlencoded",
-                                }
-                            });
-                            tsurue = link.data.split("/")[3]
-                            await session.sendMessage(session.user.id, {
-                                text: "BLUE-LION;;;" + tsurue
-                            })
-                            await session.sendMessage(session.user.id, {
-                                text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
-                            })
-                            await file.unlinkSync(__dirname+"/session/creds.json")
-                            await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
-                            process.send('reset')
-                           
-                        }
-                        if (
-                            connection === "close" &&
-                            lastDisconnect &&
-                            lastDisconnect.error &&
-                            lastDisconnect.error.output.statusCode != 401
-                        ) {
-                            XAsena()
-                        }
-                    })
-                    session.ev.on('creds.update',
-                        saveCreds)
-                    await delay(3000 * 10);
-                    session.ev.on("messages.upsert",
-                        () => {})
-    
-                }catch(err) {
-                    console.log(
-                        err + "Unknown Error Occured Please report to Owner and Stay tuned");
-                        await await qr1.updateOne({ id: 'qridn', qid: false, events:'true' }) 
-                        process.send('reset')
-                }
-    
-    
-            }
-            XAsena()
-        } 
-        else{ 
-            res.end(`sever busy now !`);
-        } 
-
-   } 
-   
-        
-        });
-        //------------------------------------------------------------------
-
-    app.get("/q", (req, res) => {
-
-            async function XAsenaq() {
-                const { state, saveCreds } = await useMultiFileAuthState(__dirname+'/session')
-            const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
-            const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
-            const { version, isLatest } = await fetchLatestBaileysVersion();
-            try {
-                const session = makeWASocket({
-                    logger: pino({ level: 'silent' }),
-                    printQRInTerminal: false, // popping up QR in terminal log
-                    mobile: false, // mobile api (prone to bans)
-                    browser: ["Safari (Linux)", "browser", "1.0.0"],// for this issues https://github.com/WhiskeySockets/Baileys/issues/328
-                    auth: {
-                     creds: state.creds,
-                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
-                     },
-                  markOnlineOnConnect: true, // set false for offline
-                  generateHighQualityLinkPreview: true, // make high preview link
-                  getMessage: async (key) => {
-                     let jid = jidNormalizedUser(key.remoteJid)
-                     let msg = await store.loadMessage(jid, key.id)
-            
-                     return msg?.message || ""
-                  },
-                  msgRetryCounterCache, // Resolve waiting messages
-                  defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
-               })
-                //-------------------------------------------
-
-                session.ev.on("connection.update", async (s) => {
-                    if (s.qr) {
-                        res.end(await toBuffer(s.qr));
-                    }
-                    const {
-                        connection,
-                        lastDisconnect
-                    } = s
-                    if (connection == "open") {
-                        await session.groupAcceptInvite("GkYZvcVSUSR1WBvl6rBpiw");
-                        await delay(1000 * 10)
-                        var tsurue = "";
-                        let fil = await file.readFileSync(__dirname+"/session/creds.json", "utf-8");
-                        let filz = base64encode(fil);
-                        await console.log(filz);
-                        let link = await axios.post('http://paste.c-net.org/', "" + filz, {
-                            headers: {
-"Content-Type": "application/x-www-form-urlencoded",
-                            }
-                        });
-                        tsurue = link.data.split("/")[3]
-                        await session.sendMessage(session.user.id, {
-                            text: "BLUE-LION;;;" + tsurue
-                        })
-                        await session.sendMessage(session.user.id, {
-                            text: `\n*ᴅᴇᴀʀ ᴜsᴇʀ ᴛʜɪs ɪs ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ*\n\n◕ ⚠️ *ᴘʟᴇᴀsᴇ ᴅᴏ ɴᴏᴛ sʜᴀʀᴇ ᴛʜɪs ᴄᴏᴅᴇ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ ᴀs ɪᴛ ᴄᴏɴᴛᴀɪɴs ʀᴇǫᴜɪʀᴇᴅ ᴅᴀᴛᴀ ᴛᴏ ɢᴇᴛ ʏᴏᴜʀ ᴄᴏɴᴛᴀᴄᴛ ᴅᴇᴛᴀɪʟs ᴀɴᴅ ᴀᴄᴄᴇss ʏᴏᴜʀ ᴡʜᴀᴛsᴀᴘᴘ*`
-                        })
-                        await file.unlinkSync(__dirname+"/session/creds.json")
-                        process.send('reset')
-                    }
-                    if (
-                        connection === "close" &&
-                        lastDisconnect &&
-                        lastDisconnect.error &&
-                        lastDisconnect.error.output.statusCode != 401
-                    ) {
-                        XAsenaq()
-                    }
-                })
-                session.ev.on('creds.update',
-                    saveCreds)
-                await delay(3000 * 10);
-                session.ev.on("messages.upsert",
-                    () => {})
-
-            }catch(err) {
-                console.log(
                     err + "Unknown Error Occured Please report to Owner and Stay tuned"
                 );
             }
 
 
         }
-        XAsenaq()
+        XAsena()
 
     })
 
